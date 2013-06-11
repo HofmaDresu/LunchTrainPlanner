@@ -23,8 +23,10 @@
     <input type="text" id="suggestion" />
     <input type="button" id="suggestlocation" value="Send" />
     <input type="hidden" id="displayname" />
-    <ul id="log">
-    </ul>
+    <div>
+        <ul id="suggestions">
+        </ul>
+    </div>
 </div>
 
 @section scripts {
@@ -34,8 +36,8 @@
         $(function () {
             var lunch = $.connection.lunchHub;
             lunch.client.AddSuggestionFromUser = function (name, message) {
-                $('#log').append('<li><strong>' + htmlEncode(name)
-                    + '</strong>: ' + htmlEncode(message) + '</li>');
+                $('#suggestions').append('<li><strong>' + htmlEncode(message)
+                    + '</strong>: ' + 1 + '</li>');
             };
 
             // Get the user name and store it to prepend to messages.
