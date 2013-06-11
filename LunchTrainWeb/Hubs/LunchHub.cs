@@ -12,5 +12,20 @@ namespace LunchTrainWeb.Hubs
         {
             Clients.All.hello();
         }
+
+        public void AddSuggestion(string name, string suggestion)
+        {
+            Clients.All.AddSuggestionFromUser(name, suggestion);
+        }
+
+        public void VoteForSuggestion(string name, string suggestion)
+        {
+
+        }
+
+        public void RemoveVote(string name, string suggestion)
+        {
+
+        }
     }
 }

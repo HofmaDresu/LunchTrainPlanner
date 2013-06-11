@@ -18,28 +18,41 @@
         </div>
     </section>
 }
-<h3>We suggest the following:</h3>
-<ol class="round">
-    <li class="one">
-        <h5>Getting Started</h5>
-        ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-        enables a clean separation of concerns and that gives you full control over markup
-        for enjoyable, agile development. ASP.NET MVC includes many features that enable
-        fast, TDD-friendly development for creating sophisticated applications that use
-        the latest web standards.
-        <a href="http://go.microsoft.com/fwlink/?LinkId=245151">Learn more…</a>
-    </li>
 
-    <li class="two">
-        <h5>Add NuGet packages and jump-start your coding</h5>
-        NuGet makes it easy to install and update free libraries and tools.
-        <a href="http://go.microsoft.com/fwlink/?LinkId=245153">Learn more…</a>
-    </li>
+<div class="container">
+    <input type="text" id="suggestion" />
+    <input type="button" id="suggestlocation" value="Send" />
+    <input type="hidden" id="displayname" />
+    <ul id="log">
+    </ul>
+</div>
 
-    <li class="three">
-        <h5>Find Web Hosting</h5>
-        You can easily find a web hosting company that offers the right mix of features
-        and price for your applications.
-        <a href="http://go.microsoft.com/fwlink/?LinkId=245157">Learn more…</a>
-    </li>
-</ol>
+@section scripts {
+    <script src="~/Scripts/jquery.signalR-1.1.2.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var lunch = $.connection.lunchHub;
+            lunch.client.AddSuggestionFromUser = function (name, message) {
+                $('#log').append('<li><strong>' + htmlEncode(name)
+                    + '</strong>: ' + htmlEncode(message) + '</li>');
+            };
+
+            // Get the user name and store it to prepend to messages.
+            $('#displayname').val(prompt('Enter your name:', ''));
+            $('#suggestion').focus();
+            
+            $.connection.hub.start().done(function () {
+                $('#suggestlocation').click(function () {
+                    lunch.server.addSuggestion($('#displayname').val(), $('#suggestion').val());
+                    $('#suggestion').val('').focus();
+                });
+            });
+        });
+        
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+    </script>
+}
