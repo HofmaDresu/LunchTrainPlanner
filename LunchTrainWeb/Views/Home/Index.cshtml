@@ -35,10 +35,14 @@
     <script>
         $(function () {
             var lunch = $.connection.lunchHub;
-            lunch.client.AddSuggestionFromUser = function (name, message) {
-                $('#suggestions').append('<li><strong>' + htmlEncode(message)
-                    + '</strong>: ' + 1 + '</li>');
+            lunch.client.AddSuggestionFromUser = function (name, locationId, locationName) {
+                $('#suggestions').append('<li id="' + htmlEncode(locationId) + '">' + htmlEncode(locationName)
+                    + ' : ' + 1 + '</li>');
             };
+
+            lunch.client.AddVoteFromUser = function (locationId, locationName, newCount) {
+                $('#' + locationId).text(locationName + ' : ' + newCount);
+            }
 
             // Get the user name and store it to prepend to messages.
             $('#displayname').val(prompt('Enter your name:', ''));
@@ -47,6 +51,10 @@
             $.connection.hub.start().done(function () {
                 $('#suggestlocation').click(function () {
                     lunch.server.addSuggestion($('#displayname').val(), $('#suggestion').val());
+                    $('#suggestion').val('').focus();
+                });
+                $('#suggestions').on('click', 'li', function (ev) {
+                    lunch.server.voteForSuggestion($('#displayname').val(), $(this).text());
                     $('#suggestion').val('').focus();
                 });
             });

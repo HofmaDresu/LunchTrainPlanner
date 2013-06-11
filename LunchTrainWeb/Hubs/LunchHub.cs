@@ -15,12 +15,15 @@ namespace LunchTrainWeb.Hubs
 
         public void AddSuggestion(string name, string suggestion)
         {
-            Clients.All.AddSuggestionFromUser(name, suggestion);
+            Clients.All.AddSuggestionFromUser(name, suggestion.Replace(' ', '_'),  suggestion);
         }
 
         public void VoteForSuggestion(string name, string suggestion)
         {
+            var count = Int32.Parse(suggestion.Split(':').Last());
 
+            Clients.All.AddVoteFromUser(suggestion.Split(':').First().Trim().Replace(' ', '_'), suggestion.Split(':').First().Trim(), count + 1);
+            
         }
 
         public void RemoveVote(string name, string suggestion)
