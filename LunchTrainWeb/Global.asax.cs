@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Autofac;
+using Autofac.Integration.Mvc;
+using LunchTrainWeb.Data;
 
 namespace LunchTrainWeb
 {
@@ -14,6 +17,8 @@ namespace LunchTrainWeb
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        private static IContainer _container { get; set; }
+
         protected void Application_Start()
         {
             RouteTable.Routes.MapHubs();
@@ -24,6 +29,13 @@ namespace LunchTrainWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+        }
+
+        private void ConfigureIOC()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterAssemblyTypes(typeof(IDAO).Assembly)
+                .AsImplementedInterfaces().InstancePerHttpRequest();
         }
     }
 }
