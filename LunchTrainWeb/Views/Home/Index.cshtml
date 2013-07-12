@@ -22,8 +22,21 @@
                 $('#suggestions').empty();
                 var votes = eval(voteList);
                 for (var i = 0; i < votes.length; i++) {
-                    $('#suggestions').append('<li title="Voted for by: ' + votes[i].VoterNames.join() + '">' + htmlEncode(votes[i].RestaurantName)
-                    + ' : ' + votes[i].VoterNames.length + '</li>');
+                    var voters = votes[i].VoterNames;
+                    var element = '<li><span class="restaurant" title="Voted for by: ' + voters.join() + '">'
+                        + htmlEncode(votes[i].RestaurantName)
+                    + ' : ' + votes[i].VoterNames.length + '</span> '
+
+                    
+                    for (var j = 0; j < voters.length; j++) {
+                        if (voters[j] === $('#displayname').val()) {
+                            element += '<span class="unvote"> &#10006;</span>';
+                            break;
+                        }
+                      }
+                    element += '</li>';
+                    
+                    $('#suggestions').append(element);
                 }
             };
 
@@ -34,9 +47,14 @@
                     lunch.server.voteForRestaurant($('#displayname').val(), $('#suggestion').val());
                     $('#suggestion').val('').focus();
                 });
-                $('#suggestions').on('click', 'li', function (ev) {
+                $('#suggestions').on('click', 'li span.restaurant', function (ev) {
                     var restaurant = $(this).text().split(' : ', 1)[0];
                     lunch.server.voteForRestaurant($('#displayname').val(), restaurant);
+                    $('#suggestion').val('').focus();
+                });
+                $('#suggestions').on('click', 'li span.unvote', function (ev) {
+                    var restaurant = $(this).prev().text().split(' : ', 1)[0];
+                    lunch.server.unVoteForRestaurant($('#displayname').val(), restaurant);
                     $('#suggestion').val('').focus();
                 });
                 lunch.server.getVotes();
