@@ -6,10 +6,9 @@
 
 body {
     background-color: #fff;
-    border-top: solid 10px #000;
     color: #333;
     font-size: .85em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    font-family: "Coustard", Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -22,6 +21,31 @@ a {
     text-decoration: underline;
 }
 
+.columns {
+float: left;
+display: inline;
+margin-left: 10px;
+margin-right: 10px;
+}
+
+header h1 {
+background: transparent url(../images/logo.png) no-repeat scroll 0 0%;
+margin: 10px 0 0 0;
+padding: 25px 140px;
+font-size: 4em;
+color: #2b2b2b;
+font-family: "Coustard", Helvetica, Arial, sans-serif;
+font-weight: normal;
+}
+header span {
+color: #547b97;
+}
+.container {
+position: relative;
+width: 960px;
+margin: 0 auto;
+padding: 0;
+}
     a:link, a:visited,
     a:active, a:hover {
         color: #333;
@@ -58,15 +82,11 @@ mark {
     visibility: hidden;
 }
 
-h1, h2, h3,
+h2, h3,
 h4, h5, h6 {
     color: #000;
     margin-bottom: 0;
     padding-bottom: 0;
-}
-
-h1 {
-    font-size: 2em;
 }
 
 h2 {
@@ -105,7 +125,6 @@ h5, h6 {
 }
 
     .main-content {
-        background: url("../Images/accent.png") no-repeat;
         padding-left: 10px;
         padding-top: 30px;
     }
@@ -130,7 +149,7 @@ footer {
 ----------------------------------------------------------*/
 .site-title {
     color: #c8c8c8;
-    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    font-family: "Coustard", Helvetica, Arial, sans-serif;
     font-size: 2.3em;
     margin: 0;
 }
