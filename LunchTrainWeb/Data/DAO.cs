@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ServiceStack.Redis;
 
 namespace LunchTrainWeb.Data
 {
@@ -9,7 +10,6 @@ namespace LunchTrainWeb.Data
     {
         public void VoteForRestaurant(string Username, string Ip, string restaurant)
         {
-            throw new NotImplementedException();
         }
 
         public void UnVoteForRestaurant(string Username, string Ip, string restaurant)
@@ -19,7 +19,17 @@ namespace LunchTrainWeb.Data
 
         public IList<RestaurantVotes> GetCurrentVotes()
         {
-            throw new NotImplementedException();
+            return new List<RestaurantVotes>
+            {
+                new RestaurantVotes {
+                    RestaurantName = "Bankok Sala",
+                    VoterNames = new List<string> {"Matt", "Will"}
+                },
+                new RestaurantVotes {
+                    RestaurantName = "Basement Burger Bar",
+                    VoterNames = new List<string> {"Mohammed"}
+                }
+            };
         }
     }
 }

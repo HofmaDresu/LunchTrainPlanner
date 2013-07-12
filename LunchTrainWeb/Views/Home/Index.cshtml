@@ -35,14 +35,14 @@
     <script>
         $(function () {
             var lunch = $.connection.lunchHub;
-            lunch.client.AddSuggestionFromUser = function (name, locationId, locationName) {
-                $('#suggestions').append('<li id="' + htmlEncode(locationId) + '">' + htmlEncode(locationName)
-                    + ' : ' + 1 + '</li>');
+            lunch.client.RefreshVotes = function (voteList) {
+                $('#suggestions').empty();
+                var votes = eval(voteList);
+                for (var i = 0; i < votes.length; i++) {
+                    $('#suggestions').append('<li>' + htmlEncode(votes[i].RestaurantName)
+                    + ' : ' + votes[i].VoterNames.length + '</li>');
+                }
             };
-
-            lunch.client.AddVoteFromUser = function (locationId, locationName, newCount) {
-                $('#' + locationId).text(locationName + ' : ' + newCount);
-            }
 
             // Get the user name and store it to prepend to messages.
             $('#displayname').val(prompt('Enter your name:', ''));
@@ -50,13 +50,14 @@
             
             $.connection.hub.start().done(function () {
                 $('#suggestlocation').click(function () {
-                    lunch.server.addSuggestion($('#displayname').val(), $('#suggestion').val());
+                    lunch.server.voteForRestaurant($('#displayname').val(), $('#suggestion').val());
                     $('#suggestion').val('').focus();
                 });
                 $('#suggestions').on('click', 'li', function (ev) {
-                    lunch.server.voteForSuggestion($('#displayname').val(), $(this).text());
+                    lunch.server.voteForRestaurant($('#displayname').val(), $(this).text());
                     $('#suggestion').val('').focus();
                 });
+                lunch.server.getVotes();
             });
         });
         

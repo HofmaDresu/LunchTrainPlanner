@@ -27,10 +27,15 @@ namespace LunchTrainWeb.Hubs
             ChangeVote(_dao.UnVoteForRestaurant, name, suggestion);
         }
 
+        public void GetVotes()
+        {
+            RefreshClients(Clients.Caller);
+        }
+
         private void ChangeVote(Action<string, string, string> act, string name, string suggestion)
         {
             act(name, GetRemoteAddress(), suggestion);
-            RefreshClients();
+            RefreshClients(Clients.All);
         }
 
         private string GetRemoteAddress()
@@ -38,10 +43,10 @@ namespace LunchTrainWeb.Hubs
             return HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"] + HttpContext.Current.Request.ServerVariables["X_FORWARDED_FOR"];
         }
 
-        private void RefreshClients()
+        private void RefreshClients(dynamic ClientsToRefresh)
         {
             var sw = GetSerializedVotes();
-            Clients.All.RefreshVotes(sw);
+            ClientsToRefresh.RefreshVotes(sw.ToString());
         }
 
         private StringWriter GetSerializedVotes()
