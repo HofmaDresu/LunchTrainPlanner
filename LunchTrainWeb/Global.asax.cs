@@ -7,8 +7,10 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac;
-using Autofac.Integration.Mvc;
+using Autofac.Integration.SignalR;
 using LunchTrainWeb.Data;
+using System.Reflection;
+using Microsoft.AspNet.SignalR;
 
 namespace LunchTrainWeb
 {
@@ -29,13 +31,24 @@ namespace LunchTrainWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            ConfigureIOC();
         }
 
         private void ConfigureIOC()
         {
+            var autofacContainerBuilder = new ContainerBuilder();
+
             var builder = new ContainerBuilder();
+            
             builder.RegisterAssemblyTypes(typeof(IDAO).Assembly)
-                .AsImplementedInterfaces().InstancePerHttpRequest();
+                .AsImplementedInterfaces().InstancePerDependency();
+
+            builder.RegisterHubs(Assembly.GetExecutingAssembly());
+
+            var container = builder.Build();
+            GlobalHost.DependencyResolver = new AutofacDependencyResolver(container);
+
+            _container = autofacContainerBuilder.Build();
         }
     }
 }
