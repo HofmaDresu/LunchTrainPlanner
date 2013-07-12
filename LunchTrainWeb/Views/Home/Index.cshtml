@@ -39,14 +39,14 @@
                 $('#suggestions').empty();
                 var votes = eval(voteList);
                 for (var i = 0; i < votes.length; i++) {
-                    $('#suggestions').append('<li>' + htmlEncode(votes[i].RestaurantName)
+                    $('#suggestions').append('<li title="Voted for by: ' + votes[i].VoterNames.join() + '">' + htmlEncode(votes[i].RestaurantName)
                     + ' : ' + votes[i].VoterNames.length + '</li>');
                 }
             };
 
             // Get the user name and store it to prepend to messages.
             $('#displayname').val(prompt('Enter your name:', ''));
-            $('#suggestion').focus();
+            $('#suggestion').focus();   
             
             $.connection.hub.start().done(function () {
                 $('#suggestlocation').click(function () {
@@ -54,7 +54,8 @@
                     $('#suggestion').val('').focus();
                 });
                 $('#suggestions').on('click', 'li', function (ev) {
-                    lunch.server.voteForRestaurant($('#displayname').val(), $(this).text());
+                    var restaurant = $(this).text().split(' : ', 1)[0];
+                    lunch.server.voteForRestaurant($('#displayname').val(), restaurant);
                     $('#suggestion').val('').focus();
                 });
                 lunch.server.getVotes();

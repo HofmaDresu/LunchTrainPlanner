@@ -8,6 +8,6 @@ namespace LunchTrainWeb.Data
     public class RestaurantVotes
     {
         public string RestaurantName;
-        public IList<string> VoterNames;
+        public List<string> VoterNames = new List<string>();
     }
 }
