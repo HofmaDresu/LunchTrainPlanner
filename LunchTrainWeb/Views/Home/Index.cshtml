@@ -3,13 +3,17 @@
 }
 
 <div class="restaurant-suggestion">
-    <input type="text" id="suggestion" placeholder="Suggest a Restaurant" />
+    <h2>Suggest a Restaurant</h2>
+    <input type="text" id="suggestion" placeholder="Restaurant Name" />
     <input type="button" id="suggestlocation" value="Suggest" class="fancy" />
     <input type="button" id="purgedata" value="Clear All Votes" />
     <input type="hidden" id="displayname" />
 </div>
-<ul id="suggestions">
-</ul>
+<div class="restaurant-list">
+    <h2>Vote for a Restaurant</h2>
+    <ul id="suggestions">
+    </ul>
+</div>
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-1.1.2.js"></script>
