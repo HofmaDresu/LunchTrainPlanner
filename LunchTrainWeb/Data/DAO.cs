@@ -49,5 +49,11 @@ namespace LunchTrainWeb.Data
                 return votes;
             }).OrderBy(v => v.VoterNames.Count()).ToList();
         }
+
+
+        public void ClearVotes()
+        {
+            _client.FlushDb();
+        }
     }
 }

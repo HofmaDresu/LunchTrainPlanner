@@ -21,6 +21,10 @@ a {
     text-decoration: underline;
 }
 
+#purgedata {
+    float:right;
+}
+
 .columns {
 float: left;
 display: inline;
