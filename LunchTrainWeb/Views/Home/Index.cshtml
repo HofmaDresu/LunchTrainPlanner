@@ -2,16 +2,14 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="container">
-    <input type="text" id="suggestion" placeholder="Enter a Restaurant" />
-    <input type="button" id="suggestlocation" value="Send" />
+<div class="restaurant-suggestion">
+    <input type="text" id="suggestion" placeholder="Suggest a Restaurant" />
+    <input type="button" id="suggestlocation" value="Suggest" class="fancy" />
     <input type="button" id="purgedata" value="Clear All Votes" />
     <input type="hidden" id="displayname" />
-    <div>
-        <ul id="suggestions">
-        </ul>
-    </div>
 </div>
+<ul id="suggestions">
+</ul>
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-1.1.2.js"></script>

@@ -10,22 +10,18 @@
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
-        <header class="container">
-            <h1 class="eight columns">
-                <span>L</span>unch<span>T</span>rain
+        <header>
+            <h1 class="logo">
+                <em>L</em>unch<em>T</em>rain
             </h1>
         </header>
-        <div id="body">
-            <section class="content-wrapper main-content clear-fix">
+        <div class="banner">
+            <div class="container">
                 @RenderBody()
-            </section>
+            </div>
         </div>
         <footer>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year - HofmaDresu</p>
-                </div>
-            </div>
+            <p>&copy; @DateTime.Now.Year - HofmaDresu</p>
         </footer>
 
         @Scripts.Render("~/bundles/jquery")
