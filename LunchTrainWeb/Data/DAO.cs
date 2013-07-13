@@ -47,7 +47,7 @@ namespace LunchTrainWeb.Data
                 var votes = new RestaurantVotes { RestaurantName = r };
                 votes.VoterNames.AddRange(_client.GetAllItemsFromSet(r).Select(u => u.Split(':').First()));
                 return votes;
-            }).OrderBy(v => v.VoterNames.Count()).ToList();
+            }).OrderBy(v => v.VoterNames.Count()).ThenBy(v => v.RestaurantName).ToList();
         }
 
 
