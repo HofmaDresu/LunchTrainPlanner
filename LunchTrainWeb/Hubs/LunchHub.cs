@@ -68,6 +68,7 @@ namespace LunchTrainWeb.Hubs
         {
             _dao.ClearVotes();
             RefreshClients(Clients.All);
+            Clients.All.HideOverlays();
         }
 
         public void CancelClearVotes()

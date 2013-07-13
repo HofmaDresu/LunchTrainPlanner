@@ -1,7 +1,22 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-
+<div id="confirmpurgeshade" style="display:none; position:fixed; width:100%; height:100%; z-index:100; top:0; left:0;background: silver; opacity: 0.5; filter: alpha(opacity=50); ">
+    
+</div>
+<div id="confirmpurgescreen" style="display:none; position:fixed; top: 40%; left: 40%; width: 25%; background: #FFF; z-index:101; border: 1px solid #000;">
+    <label id="confirmpurgetext" style="color:#000;"></label>
+    <div style="padding-top:1em;">
+        <input type="button" id="confirmpurge" value="Agree" class="fancy" style="float:left;"/>
+        <input type="button" id="denypurge" value="Deny" class="fancy" style="float:right;" />
+    </div>
+</div>
+<div id="awaitpurgeconfirm" style="display:none; position:fixed; top: 40%; left: 40%; width: 25%; background: #FFF; z-index:101; border: 1px solid #000;">
+    <label style="color:#000;">Your request has been submitted...</label>
+    <div style="padding-top:1em;">
+        <input type="button" id="cancelpurge" value="Cancel" class="fancy" style="float:left;"/>
+    </div>
+</div>
 <div class="restaurant-suggestion">
     <input type="text" id="suggestion" placeholder="Suggest a Restaurant" />
     <input type="button" id="suggestlocation" value="Suggest" class="fancy" />
@@ -39,14 +54,24 @@
                 }
             };
 
-            lunch.client.RequestClear = function (requester) {
-                if (confirm(requester + " wants to clear all votes. Do you agree?")) {
+            $('#denypurge').click(function () {
+                hideOverlays();
+            });
 
-                };
+            function hideOverlays() {
+                $('#confirmpurgeshade').hide();
+                $('#awaitpurgeconfirm').hide();
+                $('#confirmpurgescreen').hide();
+            }
+
+            lunch.client.cancelClearRequest = hideOverlays;
+
+            lunch.client.RequestClear = function (requester) {
+                $('#confirmpurgetext').text(requester + " wants to clear all votes. Do you agree?");
+                $('#confirmpurgeshade').show();
+                $('#confirmpurgescreen').show();
             };
 
-            
-            
             $.connection.hub.start().done(function () {
                 $('#suggestlocation').click(function () {
                     lunch.server.voteForRestaurant($('#displayname').val(), $('#suggestion').val());
@@ -64,7 +89,16 @@
                 });
                 $('#purgedata').click(function () {
                     lunch.server.requestClearVotes($('#displayname').val());
+                    $('#confirmpurgeshade').show();
+                    $('#awaitpurgeconfirm').show();
+                });
+                $('#confirmpurge').click(function () {
+                    lunch.server.confirmClearVotes();
                     $('#suggestion').val('').focus();
+                });
+                $('#cancelpurge').click(function () {
+                    lunch.server.cancelClearVotes();
+                    hideOverlays();
                 });
                 lunch.server.getVotes();
 
