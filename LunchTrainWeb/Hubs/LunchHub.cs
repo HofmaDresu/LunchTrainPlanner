@@ -89,16 +89,7 @@ namespace LunchTrainWeb.Hubs
 
         private void RefreshClients(dynamic ClientsToRefresh)
         {
-            var sw = GetSerializedVotes();
-            ClientsToRefresh.RefreshVotes(sw.ToString());
-        }
-
-        private StringWriter GetSerializedVotes()
-        {
-            var serializer = new Microsoft.AspNet.SignalR.Json.JsonNetSerializer();
-            var sw = new StringWriter();
-            serializer.Serialize(_dao.GetCurrentVotes().OrderByDescending(r => r.VoterNames.Count()), sw);
-            return sw;
+            ClientsToRefresh.RefreshVotes(_dao.GetCurrentVotes().OrderByDescending(r => r.VoterNames.Count()).ToList());
         }
     }
 
