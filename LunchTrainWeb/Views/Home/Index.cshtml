@@ -36,9 +36,8 @@
     <script>
         $(function () {
             var lunch = $.connection.lunchHub;
-            lunch.client.RefreshVotes = function (voteList) {
+            lunch.client.RefreshVotes = function (votes) {
                 $('#suggestions').empty();
-                var votes = eval(voteList);
                 for (var i = 0; i < votes.length; i++) {
                     var voters = votes[i].VoterNames;
                     var element = '<li><span class="restaurant" title="Voted for by: ' + voters.join() + '">'
