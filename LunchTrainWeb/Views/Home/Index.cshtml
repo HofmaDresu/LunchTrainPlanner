@@ -26,8 +26,9 @@
 </div>
 <div class="restaurant-list">
     <h2>Vote for a Restaurant</h2>
-    <ul id="suggestions">
-    </ul>
+    <div id="suggestions">
+        <svg  fill="#494a4a"></svg>
+    </div>
 </div>
 
 @section scripts {
@@ -37,25 +38,108 @@
         $(function () {
             var lunch = $.connection.lunchHub;
             lunch.client.RefreshVotes = function (votes) {
-                $('#suggestions').empty();
-                for (var i = 0; i < votes.length; i++) {
-                    var voters = votes[i].VoterNames;
-                    var element = '<li><span class="restaurant" title="Voted for by: ' + voters.join() + '">'
-                        + htmlEncode(votes[i].RestaurantName)
-                    + ' : ' + votes[i].VoterNames.length + '</span> '
+                var width = 420;
+                var xOffset = 150;
+                var chart = d3.select("#suggestions svg")
+                    .attr("class", "chart")
+                    .attr("width", width)
+                    .attr("height", 20 * votes.length);
+                var maxVote = d3.max($.map(votes, function (o) { return o.VoterNames.length; }));
 
-                    
-                    for (var j = 0; j < voters.length; j++) {
-                        if (voters[j] === $('#displayname').val()) {
-                            element += '<span class="unvote"> &#10006;</span>';
-                            break;
-                        }
-                      }
-                    element += '</li>';
-                    
-                    $('#suggestions').append(element);
-                }
+                prepareChartBars(votes, chart, maxVote, width, xOffset);
+                prepareChartValues(votes, chart, maxVote, width, xOffset);
+                prepareChartLabels(votes, chart);
             };
+
+            function prepareChartBars(votes, chart, maxVote, width, xOffset) {
+                var x = d3.scale.linear()
+                    .domain([0, maxVote])
+                    .range([0, width]);
+
+                var bars = chart.selectAll("rect");
+                var barData = bars.data(votes);
+
+                barData.exit().remove();
+
+                barData
+                    .attr("height", 20)
+                    .attr("x", xOffset)
+                    .transition()
+                    .duration(500)
+                    .ease("quad")
+                    .attr("y", function (d, i) { return i * 20; })
+                    .attr("width", function (d, i) { return ((d.VoterNames.length) / maxVote) * (width - xOffset)});
+
+                barData.enter().append("rect")
+                    .attr("y", function (d, i) { return i * 20; })
+                    .attr("x", xOffset)
+                    .attr("height", 20)
+                    .transition()
+                    .duration(500)
+                    .ease("quad")
+                    .attr("width", function (d, i) { return ((d.VoterNames.length) / maxVote) * (width - xOffset) });
+            };
+
+            function prepareChartValues(votes, chart, maxVote, width, xOffset) {
+
+                chart.selectAll("text.chartvalue")
+                    .data(votes)
+                    .attr("class", "chartvalue")
+                    .attr("y", function (d, i) { return i * 20; })
+                    .transition()
+                    .duration(500)
+                    .attr("x", xOffset)
+                    .ease("quad")
+                    .attr("x", function (d, i) { return (((d.VoterNames.length) / maxVote) * (width - xOffset)) + xOffset })
+                    .attr("dx", -3) // padding-right
+                    .attr("dy", "16px") // vertical-align: middle
+                    .attr("text-anchor", "end") // text-align: right
+                    .text(function (d) { return d.VoterNames.length });
+
+                chart.selectAll("text.chartvalue")
+                    .data(votes)
+                    .enter().append("text")
+                    .attr("class", "chartvalue")
+                    .attr("y", function (d, i) { return i * 20; })
+                    .attr("x", xOffset)
+                    .transition()
+                    .duration(500)
+                    .ease("quad")
+                    .attr("x", function (d, i) { return (((d.VoterNames.length) / maxVote) * (width - xOffset)) + xOffset})
+                    .attr("dx", -3) // padding-right
+                    .attr("dy", "16px") // vertical-align: middle
+                    .attr("text-anchor", "end") // text-align: right
+                    .text(function (d) { return d.VoterNames.length });
+
+                chart.selectAll("text.chartvalue").data(votes).exit().remove();
+            };
+
+            function prepareChartLabels(votes, chart) {
+                var labeldata = votes.map(function (v) { return v.RestaurantName; });
+
+                chart.selectAll("text.chartlabel").data(votes).exit().remove();
+
+                chart.selectAll("text.chartlabel")
+                    .data(labeldata)
+                    .attr("class", "chartlabel")
+                    .attr("x", 0)
+                    .attr("dy", "16px")
+                    .transition()
+                    .duration(500)
+                    .ease("quad")
+                    .attr("y", function (d, i) { return i * 20; })
+                    .text(String);
+                chart.selectAll("text.chartlabel")
+                    .data(labeldata)
+                    .enter().append("text")
+                    .attr("class", "chartlabel")
+                    .attr("y", function (d, i) { return i * 20; })
+                    .attr("x", 0)
+                    .attr("dy", "16px")
+                    .text(String);
+
+                
+            }
 
             $('#denypurge').click(function () {
                 hideOverlays();

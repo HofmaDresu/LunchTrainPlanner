@@ -83,3 +83,10 @@ header em {
     font-size:16px;
     font-family:Coustard, serif;
 }
+.chart rect {
+   stroke: white;
+   fill: steelblue;
+}
+.chartvalue, .chartlabel {
+    fill:white;
+}
