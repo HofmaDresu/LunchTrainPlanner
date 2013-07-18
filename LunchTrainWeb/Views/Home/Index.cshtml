@@ -120,23 +120,32 @@
                 chart.selectAll("text.chartlabel").data(votes).exit().remove();
 
                 chart.selectAll("text.chartlabel")
-                    .data(labeldata)
-                    .attr("class", "chartlabel")
-                    .attr("x", 0)
-                    .attr("dy", "16px")
+                    .data(votes)
                     .transition()
                     .duration(500)
                     .ease("quad")
                     .attr("y", function (d, i) { return i * 20; })
-                    .text(String);
+                    .text(function (d) {
+                        if (d.VoterNames.indexOf($('#displayname').val()) >= 0) {
+                            return "(x) " + d.RestaurantName;
+                        } else {
+                            return d.RestaurantName;
+                        }
+                    });
                 chart.selectAll("text.chartlabel")
-                    .data(labeldata)
+                    .data(votes)
                     .enter().append("text")
                     .attr("class", "chartlabel")
                     .attr("y", function (d, i) { return i * 20; })
                     .attr("x", 0)
                     .attr("dy", "16px")
-                    .text(String);
+                    .text(function (d) {
+                        if (d.VoterNames.indexOf($('#displayname').val()) >= 0) {
+                            return "(x) " + d.RestaurantName;
+                        } else {
+                            return d.RestaurantName;
+                        }
+                    });
 
                 
             }
@@ -155,6 +164,13 @@
                     .attr("width", width)
                     .attr("fill-opacity", 0)
                     .attr("y", function (d, i) { return i * 20; })
+                    .on("click", function (d) {
+                        if (d.VoterNames.indexOf($('#displayname').val()) >= 0) {
+                            lunch.server.unVoteForRestaurant($('#displayname').val(), d.RestaurantName);
+                        } else {
+                            lunch.server.voteForRestaurant($('#displayname').val(), d.RestaurantName);
+                        }
+                    })
                     .append("title")
                     .text(function (d) { return d.VoterNames.join(); });
             }
@@ -180,16 +196,6 @@
             $.connection.hub.start().done(function () {
                 $('#suggestlocation').click(function () {
                     lunch.server.voteForRestaurant($('#displayname').val(), $('#suggestion').val());
-                    $('#suggestion').val('').focus();
-                });
-                $('#suggestions').on('click', 'li span.restaurant', function (ev) {
-                    var restaurant = $(this).text().split(' : ', 1)[0];
-                    lunch.server.voteForRestaurant($('#displayname').val(), restaurant);
-                    $('#suggestion').val('').focus();
-                });
-                $('#suggestions').on('click', 'li span.unvote', function (ev) {
-                    var restaurant = $(this).prev().text().split(' : ', 1)[0];
-                    lunch.server.unVoteForRestaurant($('#displayname').val(), restaurant);
                     $('#suggestion').val('').focus();
                 });
                 $('#purgedata').click(function () {
