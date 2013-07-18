@@ -19,7 +19,7 @@
 </div>
 <div class="restaurant-suggestion">
     <h2>Suggest a Restaurant</h2>
-    <input type="text" id="suggestion" placeholder="Restaurant Name" />
+    <input type="text" id="suggestion" placeholder="Restaurant Name" maxlength="16" />
     <input type="button" id="suggestlocation" value="Suggest" class="fancy" />
     <input type="button" id="purgedata" value="Clear All Votes" />
     <input type="hidden" id="displayname" />
@@ -39,7 +39,7 @@
             var lunch = $.connection.lunchHub;
             lunch.client.RefreshVotes = function (votes) {
                 var width = 420;
-                var xOffset = 150;
+                var xOffset = 160;
                 var chart = d3.select("#suggestions svg")
                     .attr("class", "chart")
                     .attr("width", width)
