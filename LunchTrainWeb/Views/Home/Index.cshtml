@@ -57,10 +57,7 @@
                     .domain([0, maxVote])
                     .range([0, width]);
 
-                var bars = chart.selectAll("rect.bar");
-                var barData = bars.data(votes);
-
-                barData.exit().remove();
+                var barData = chart.selectAll("rect.bar").data(votes);
 
                 barData
                     .transition()
@@ -82,22 +79,17 @@
 
             function prepareChartValues(votes, chart, maxVote, width, xOffset) {
 
-                chart.selectAll("text.chartvalue")
-                    .data(votes)
-                    .attr("class", "chartvalue")
-                    .attr("y", function (d, i) { return i * 20; })
+                var values = chart.selectAll("text.chartvalue").data(votes);
+
+                values
                     .transition()
                     .duration(500)
                     .attr("x", xOffset)
                     .ease("quad")
                     .attr("x", function (d, i) { return (((d.VoterNames.length) / maxVote) * (width - xOffset)) + xOffset })
-                    .attr("dx", -3) // padding-right
-                    .attr("dy", "16px") // vertical-align: middle
-                    .attr("text-anchor", "end") // text-align: right
                     .text(function (d) { return d.VoterNames.length });
 
-                chart.selectAll("text.chartvalue")
-                    .data(votes)
+                values
                     .enter().append("text")
                     .attr("class", "chartvalue")
                     .attr("y", function (d, i) { return i * 20; })
@@ -106,19 +98,15 @@
                     .duration(500)
                     .ease("quad")
                     .attr("x", function (d, i) { return (((d.VoterNames.length) / maxVote) * (width - xOffset)) + xOffset})
-                    .attr("dx", -3) // padding-right
-                    .attr("dy", "16px") // vertical-align: middle
-                    .attr("text-anchor", "end") // text-align: right
+                    .attr("dx", -3)
+                    .attr("dy", "16px")
+                    .attr("text-anchor", "end")
                     .text(function (d) { return d.VoterNames.length });
-
-                chart.selectAll("text.chartvalue").data(votes).exit().remove();
             };
 
             function prepareChartLabels(votes, chart) {
                 var labeldata = votes.map(function (v) { return v.RestaurantName; });
-
-                chart.selectAll("text.chartlabel").data(votes).exit().remove();
-
+                
                 chart.selectAll("text.chartlabel")
                     .data(votes)
                     .transition()
