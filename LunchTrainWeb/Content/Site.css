@@ -83,7 +83,7 @@ header em {
     font-size:16px;
     font-family:Coustard, serif;
 }
-.chart rect {
+.chart rect.bar {
    stroke: white;
    fill: steelblue;
 }

@@ -49,6 +49,7 @@
                 prepareChartBars(votes, chart, maxVote, width, xOffset);
                 prepareChartValues(votes, chart, maxVote, width, xOffset);
                 prepareChartLabels(votes, chart);
+                prepareChartTooltipAndClick(votes, chart, width);
             };
 
             function prepareChartBars(votes, chart, maxVote, width, xOffset) {
@@ -56,14 +57,12 @@
                     .domain([0, maxVote])
                     .range([0, width]);
 
-                var bars = chart.selectAll("rect");
+                var bars = chart.selectAll("rect.bar");
                 var barData = bars.data(votes);
 
                 barData.exit().remove();
 
                 barData
-                    .attr("height", 20)
-                    .attr("x", xOffset)
                     .transition()
                     .duration(500)
                     .ease("quad")
@@ -71,6 +70,7 @@
                     .attr("width", function (d, i) { return ((d.VoterNames.length) / maxVote) * (width - xOffset)});
 
                 barData.enter().append("rect")
+                    .attr("class", "bar")
                     .attr("y", function (d, i) { return i * 20; })
                     .attr("x", xOffset)
                     .attr("height", 20)
@@ -139,6 +139,24 @@
                     .text(String);
 
                 
+            }
+
+            function prepareChartTooltipAndClick(votes, chart, width) {
+                var overlayBars = chart.selectAll("rect.overlay").data(votes);
+
+                overlayBars
+                    .attr("y", function (d, i) { return i * 20; })
+                    .select("title")
+                    .text(function (d) { return d.VoterNames.join(); });
+
+                overlayBars.enter().append("rect")
+                    .attr("class", "overlay")
+                    .attr("height", 20)
+                    .attr("width", width)
+                    .attr("fill-opacity", 0)
+                    .attr("y", function (d, i) { return i * 20; })
+                    .append("title")
+                    .text(function (d) { return d.VoterNames.join(); });
             }
 
             $('#denypurge').click(function () {
