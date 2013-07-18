@@ -14,6 +14,9 @@ namespace LunchTrainWeb.Data
         public DAO()
         {
             _client = new RedisClient();
+            //Set to 1 to avoid conflicts with any default installs
+            //TODO: make configurable
+            _client.Db = 1;
         }
 
         public void VoteForRestaurant(string Username, string Ip, string restaurant)
