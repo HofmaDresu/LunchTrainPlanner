@@ -68,7 +68,7 @@ namespace LunchTrainWeb.Hubs
         {
             _dao.ClearVotes();
             RefreshClients(Clients.All);
-            Clients.All.HideOverlays();
+            Clients.All.CancelClearRequest();
         }
 
         public void CancelClearVotes()
@@ -87,9 +87,9 @@ namespace LunchTrainWeb.Hubs
             return HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"] + HttpContext.Current.Request.ServerVariables["X_FORWARDED_FOR"];
         }
 
-        private void RefreshClients(dynamic ClientsToRefresh)
+        private void RefreshClients(dynamic clientsToRefresh)
         {
-            ClientsToRefresh.RefreshVotes(_dao.GetCurrentVotes().OrderByDescending(r => r.VoterNames.Count()).ToList());
+            clientsToRefresh.RefreshVotes(_dao.GetCurrentVotes().OrderByDescending(r => r.VoterNames.Count()).ToList());
         }
     }
 
