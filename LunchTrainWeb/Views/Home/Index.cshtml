@@ -22,7 +22,7 @@
     <input type="text" id="suggestion" placeholder="Restaurant Name" maxlength="16" />
     <input type="button" id="suggestlocation" value="Suggest" class="fancy" />
     <input type="button" id="purgedata" value="Clear All Votes" />
-    <input type="hidden" id="displayname" />
+    <input type="hidden" id="displayname" value="@ViewBag.DisplayName"/>
 </div>
 <div class="restaurant-list">
     <h2>Vote for a Restaurant</h2>
@@ -202,7 +202,9 @@
                 lunch.server.getVotes();
 
                 // Get the user name and store it to prepend to messages.
-                $('#displayname').val(prompt('Enter your name:', ''));
+                if ($('#displayname').val() === '') {
+                    $('#displayname').val(prompt('Enter your name:', ''));
+                }
                 $('#suggestion').focus();
             });
 

@@ -10,6 +10,10 @@ namespace LunchTrainWeb.Controllers
     {
         public ActionResult Index()
         {
+            if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity != null)
+            {
+                ViewBag.DisplayName = System.Web.HttpContext.Current.User.Identity.Name;
+            }
             return View();
         }
     }
