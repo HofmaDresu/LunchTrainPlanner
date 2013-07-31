@@ -12,5 +12,7 @@ namespace LunchTrainWeb.Data
         void UnVoteForRestaurant(string Username, string Ip, string restaurant);
         IList<RestaurantVotes> GetCurrentVotes();
         void ClearVotes();
+        void BanUser(string Username, string Ip);
+        bool IsUserBanned(string Username, string Ip);
     }
 }

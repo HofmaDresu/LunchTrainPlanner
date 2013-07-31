@@ -38,11 +38,19 @@ namespace LunchTrainWeb.Hubs
 
         public void VoteForRestaurant(string name, string suggestion)
         {
+            if(!VerifyUserName(name, Clients))
+            {
+                return;
+            }
             ChangeVote(_dao.VoteForRestaurant, name, suggestion);
         }
 
         public void UnVoteForRestaurant(string name, string suggestion)
         {
+            if(!VerifyUserName(name, Clients))
+            {
+                return;
+            }
             ChangeVote(_dao.UnVoteForRestaurant, name, suggestion);
         }
 
@@ -53,6 +61,10 @@ namespace LunchTrainWeb.Hubs
 
         public void RequestClearVotes(string name)
         {
+            if(!VerifyUserName(name, Clients))
+            {
+                return;
+            }
             if (UserHandler.ConnectedIds.Count > 1)
 	        {
                 Clients.Others.RequestClear(name);
@@ -90,6 +102,21 @@ namespace LunchTrainWeb.Hubs
         private void RefreshClients(dynamic clientsToRefresh)
         {
             clientsToRefresh.RefreshVotes(_dao.GetCurrentVotes().OrderByDescending(r => r.VoterNames.Count()).ToList());
+        }
+
+        private Boolean VerifyUserName(string submittedUserName, Microsoft.AspNet.SignalR.Hubs.HubConnectionContext clients)
+        {
+            if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity != null)
+            {
+                var serverUserName = System.Web.HttpContext.Current.User.Identity.Name;
+                if (submittedUserName != serverUserName || _dao.IsUserBanned(serverUserName, GetRemoteAddress()))
+                {
+                    _dao.BanUser(serverUserName, GetRemoteAddress());
+                    clients.Caller.RedirectMe("/Home/Ban");
+                    return false;
+                }
+            }
+            return true;
         }
     }
 

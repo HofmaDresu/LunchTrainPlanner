@@ -181,6 +181,10 @@
                 $('#confirmpurgescreen').show();
             };
 
+            lunch.client.RedirectMe = function (target) {
+                window.location = target;
+            };
+
             $.connection.hub.start().done(function () {
                 $('#suggestlocation').click(function () {
                     lunch.server.voteForRestaurant($('#displayname').val(), $('#suggestion').val());

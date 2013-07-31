@@ -10,6 +10,7 @@ namespace LunchTrainWeb.Data
     {
         private IRedisClient _client;
         private readonly string RESTAURANT_LIST = "RestaurantList";
+        private readonly string BANNED_SET = "BannedUserSet";
 
         public DAO()
         {
@@ -57,6 +58,17 @@ namespace LunchTrainWeb.Data
         public void ClearVotes()
         {
             _client.FlushDb();
+        }
+
+
+        public void BanUser(string Username, string Ip)
+        {
+            AddItemToSetAndSetExpiration(BANNED_SET, GetUniqueUsername(Username, Ip));
+        }
+
+        public bool IsUserBanned(string Username, string Ip)
+        {
+            return _client.SetContainsItem(BANNED_SET, GetUniqueUsername(Username, Ip));
         }
     }
 }

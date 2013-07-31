@@ -16,5 +16,10 @@ namespace LunchTrainWeb.Controllers
             }
             return View();
         }
+
+        public ViewResult Ban()
+        {
+            return View();
+        }
     }
 }
