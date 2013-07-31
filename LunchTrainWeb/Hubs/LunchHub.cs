@@ -106,14 +106,17 @@ namespace LunchTrainWeb.Hubs
 
         private Boolean VerifyUserName(string submittedUserName, Microsoft.AspNet.SignalR.Hubs.HubConnectionContext clients)
         {
-            if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity != null)
+            if (System.Configuration.ConfigurationManager.AppSettings["ActivateBanHammer"].ToLower() == "true")
             {
-                var serverUserName = System.Web.HttpContext.Current.User.Identity.Name;
-                if (submittedUserName != serverUserName || _dao.IsUserBanned(serverUserName, GetRemoteAddress()))
+                if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null && System.Web.HttpContext.Current.User.Identity != null)
                 {
-                    _dao.BanUser(serverUserName, GetRemoteAddress());
-                    clients.Caller.RedirectMe("/Home/Ban");
-                    return false;
+                    var serverUserName = System.Web.HttpContext.Current.User.Identity.Name;
+                    if (submittedUserName != serverUserName || _dao.IsUserBanned(serverUserName, GetRemoteAddress()))
+                    {
+                        _dao.BanUser(serverUserName, GetRemoteAddress());
+                        clients.Caller.RedirectMe("/Home/Ban");
+                        return false;
+                    }
                 }
             }
             return true;
