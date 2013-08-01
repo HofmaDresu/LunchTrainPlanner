@@ -38,7 +38,7 @@ namespace LunchTrainWeb.Hubs
 
         public void VoteForRestaurant(string name, string suggestion)
         {
-            if(!VerifyUserName(name, Clients))
+            if (!VerifyUserName(name) || !VerifySuggestion(name, suggestion))
             {
                 return;
             }
@@ -47,7 +47,7 @@ namespace LunchTrainWeb.Hubs
 
         public void UnVoteForRestaurant(string name, string suggestion)
         {
-            if(!VerifyUserName(name, Clients))
+            if (!VerifyUserName(name) || !VerifySuggestion(name, suggestion))
             {
                 return;
             }
@@ -61,7 +61,7 @@ namespace LunchTrainWeb.Hubs
 
         public void RequestClearVotes(string name)
         {
-            if(!VerifyUserName(name, Clients))
+            if(!VerifyUserName(name))
             {
                 return;
             }
@@ -104,7 +104,7 @@ namespace LunchTrainWeb.Hubs
             clientsToRefresh.RefreshVotes(_dao.GetCurrentVotes().OrderByDescending(r => r.VoterNames.Count()).ToList());
         }
 
-        private Boolean VerifyUserName(string submittedUserName, Microsoft.AspNet.SignalR.Hubs.HubConnectionContext clients)
+        private Boolean VerifyUserName(string submittedUserName)
         {
             if (System.Configuration.ConfigurationManager.AppSettings["ActivateBanHammer"].ToLower() == "true")
             {
@@ -113,13 +113,28 @@ namespace LunchTrainWeb.Hubs
                     var serverUserName = System.Web.HttpContext.Current.User.Identity.Name;
                     if (submittedUserName != serverUserName || _dao.IsUserBanned(serverUserName, GetRemoteAddress()))
                     {
-                        _dao.BanUser(serverUserName, GetRemoteAddress());
-                        clients.Caller.RedirectMe("/Home/Ban");
+                        BanUser(serverUserName);
                         return false;
                     }
                 }
             }
             return true;
+        }
+
+        private Boolean VerifySuggestion(string submittedUserName, string suggestion)
+        {
+            if (suggestion.Length > 16)
+            {
+                BanUser(submittedUserName);
+                return false;
+            }
+            return true;
+        }
+
+        private void BanUser(string serverUserName)
+        {
+            _dao.BanUser(serverUserName, GetRemoteAddress());
+            Clients.Caller.RedirectMe("/Home/Ban");
         }
     }
 
