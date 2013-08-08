@@ -134,7 +134,7 @@ namespace LunchTrainWeb.Hubs
         private void BanUser(string serverUserName)
         {
             _dao.BanUser(serverUserName, GetRemoteAddress());
-            Clients.Caller.RedirectMe("/Home/Ban");
+            Clients.Caller.RedirectMe("Home/Ban");
         }
     }
 
