@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR;
 using LunchTrainWeb.Data;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace LunchTrainWeb.Hubs
 {
@@ -123,12 +124,19 @@ namespace LunchTrainWeb.Hubs
 
         private Boolean VerifySuggestion(string submittedUserName, string suggestion)
         {
-            if (suggestion.Length > 16)
+            if (suggestion.Length > 16 || IsAntiSuggestion(suggestion))
             {
                 BanUser(submittedUserName);
                 return false;
             }
             return true;
+        }
+
+        private Boolean IsAntiSuggestion(string suggestion)
+        {
+            var regex = new Regex(@"\bnot\b|\banything(\b.*\b|_+)but\b");
+            var lowerSuggestion = suggestion.ToLower();
+            return regex.IsMatch(lowerSuggestion);
         }
 
         private void BanUser(string serverUserName)
