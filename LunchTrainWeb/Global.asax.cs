@@ -23,6 +23,7 @@ namespace LunchTrainWeb
 
         protected void Application_Start()
         {
+            ConfigureIOC();
             RouteTable.Routes.MapHubs();
             AreaRegistration.RegisterAllAreas();
 
@@ -31,7 +32,6 @@ namespace LunchTrainWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
-            ConfigureIOC();
         }
 
         private void ConfigureIOC()
