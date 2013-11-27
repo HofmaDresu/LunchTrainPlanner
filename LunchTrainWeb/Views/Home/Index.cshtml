@@ -38,6 +38,12 @@
         $(function () {
             var lunch = $.connection.lunchHub;
             lunch.client.RefreshVotes = function (votes) {
+                if ($('#raptorize') && (
+                    $('#displayname').val().indexOf("mhussain") > -1
+                    || $('#displayname').val().indexOf("mhoffman") > -1
+                    || $('#displayname').val().indexOf("wfuqua") > -1
+                    )) showRapter();
+
                 var width = 420;
                 var xOffset = 160;
                 var chart = d3.select("#suggestions svg")
@@ -218,6 +224,19 @@
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;
+        }
+    </script>
+    <script id="raptorize-link" src="~/Scripts/Raptorize/jquery.raptorize.1.0.js"></script>
+    <script id="raptorize">
+        function showRapter() {
+            $('body').raptorize({ 'enterOn': 'timer', 'delayTime': 0 });
+            setTimeout(cleanUp(), 3000);
+        }
+    </script>
+    <script>
+        function cleanUp() {
+            $('#raptorize').remove();
+            $('#raptorize-link').remove();
         }
     </script>
 }

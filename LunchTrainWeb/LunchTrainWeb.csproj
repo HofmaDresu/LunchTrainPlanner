@@ -295,6 +295,9 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Raptorize\jquery.raptorize.1.0.js" />
+    <Content Include="Scripts\Raptorize\raptor-sound.mp3" />
+    <Content Include="Scripts\Raptorize\raptor.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -312,6 +315,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Ban.cshtml" />
+    <Content Include="Scripts\Raptorize\raptor-psd.psd" />
+    <Content Include="Scripts\Raptorize\raptor-sound.ogg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
